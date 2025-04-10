@@ -3,7 +3,7 @@ import HeaderBottom from '../HederBottom/HederBottom';
 
 const Header = () => {
   return (
-    <header>
+    <header className='mb-6'>
       <HeaderTop />
       <HeaderBottom />
     </header>
