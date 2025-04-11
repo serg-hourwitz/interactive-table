@@ -17,32 +17,59 @@ const AddPersonModal: React.FC<AddPersonModalProps> = ({ onClose, onSave }) => {
     gender: '',
   });
 
-  const isValid =
-    formData.name.trim() !== '' && formData.birth_year.trim() !== '';
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    Object.entries(formData).forEach(([key, value]) => {
+      const trimmed = value.trim();
+
+      if (!trimmed) {
+        newErrors[key] = 'This field is required';
+      } else if (
+        (key === 'height' || key === 'mass') &&
+        !Number.isFinite(Number(trimmed))
+      ) {
+        newErrors[key] = 'Must be a valid number';
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors((prev) => ({ ...prev, [e.target.name]: '' })); // clear error
   };
 
   const handleSubmit = () => {
-    if (!isValid) return;
+    if (!validate()) return;
     onSave(formData);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-y-auto py-10">
       <div className="bg-white p-6 rounded shadow-md w-96 space-y-4">
         <h2 className="text-lg font-semibold mb-2">Add New Person</h2>
         {Object.entries(formData).map(([key, value]) => (
-          <input
-            key={key}
-            name={key}
-            value={value}
-            onChange={handleChange}
-            placeholder={key.replace('_', ' ')}
-            className="w-full border p-2 rounded"
-          />
+          <div key={key}>
+            <input
+              type={key === 'height' || key === 'mass' ? 'number' : 'text'}
+              name={key}
+              value={value}
+              onChange={handleChange}
+              placeholder={key.replace('_', ' ')}
+              className={`w-full border p-2 rounded ${
+                errors[key] ? 'border-red-500' : ''
+              }`}
+            />
+            {errors[key] && (
+              <p className="text-red-500 text-sm mt-1">{errors[key]}</p>
+            )}
+          </div>
         ))}
         <div className="flex justify-end gap-4">
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
@@ -50,12 +77,11 @@ const AddPersonModal: React.FC<AddPersonModalProps> = ({ onClose, onSave }) => {
           </button>
           <button
             className={`px-4 py-2 rounded ${
-              isValid
+              Object.keys(errors).length === 0
                 ? 'bg-indigo-600 text-white'
                 : 'bg-gray-400 text-white cursor-not-allowed'
             }`}
             onClick={handleSubmit}
-            disabled={!isValid}
           >
             Save
           </button>

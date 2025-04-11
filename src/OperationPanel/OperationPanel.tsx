@@ -53,7 +53,7 @@ const OperationPanel: React.FC<OperationPanelProps> = ({
           <span>Show</span>
           <div className="relative w-16">
             <select
-              className="w-full p-1 appearance-none bg-white border border-gray-300 rounded-md text-base cursor-pointer border-none outline-none"
+              className="w-full p-1 appearance-none bg-white border border-gray-300 rounded-md text-sm cursor-pointer border-none outline-none font-secondary" 
               value={itemsPerPage}
               onChange={onItemsPerPageChange}
             >

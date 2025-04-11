@@ -13,6 +13,7 @@ const PeopleTable: React.FC = () => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [currentPerson, setCurrentPerson] = useState<any | null>(null);
+  const [filteredPeople, setFilteredPeople] = useState<any[] | null>(null);
 
   // Пагінація
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,13 +54,13 @@ const PeopleTable: React.FC = () => {
     setItemsPerPage(Number(event.target.value));
   };
 
-  const handleRowClick = (e: React.MouseEvent, person: any) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName.toLowerCase() !== 'input') {
-      setCurrentPerson(person);
-      setEditModalOpen(true);
-    }
-  };
+  // const handleRowClick = (e: React.MouseEvent, person: any) => {
+  //   const target = e.target as HTMLElement;
+  //   if (target.tagName.toLowerCase() !== 'input') {
+  //     setCurrentPerson(person);
+  //     setEditModalOpen(true);
+  //   }
+  // };
 
   const handleSavePerson = (updatedPerson: any) => {
     const updatedPeople = people.map((p, i) =>
@@ -90,14 +91,24 @@ const PeopleTable: React.FC = () => {
     }
   };
 
-  const handleSearch = (filters: any) => {
-    // Filter logic to be added
+  const handleSearch = (filters: Record<string, string>) => {
+    const filtered = people.filter((person) =>
+      Object.entries(filters).every(([key, value]) =>
+        person[key]?.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+    setFilteredPeople(filtered);
+    setCurrentPage(1); // скинути на першу сторінку
   };
 
   // Розрахунок індексів для пагінації
+  const visiblePeople = filteredPeople ?? people;
   const indexOfLastPerson = currentPage * itemsPerPage;
   const indexOfFirstPerson = indexOfLastPerson - itemsPerPage;
-  const currentPeople = people.slice(indexOfFirstPerson, indexOfLastPerson);
+  const currentPeople = visiblePeople.slice(
+    indexOfFirstPerson,
+    indexOfLastPerson
+  );
 
   return (
     <>
@@ -115,6 +126,7 @@ const PeopleTable: React.FC = () => {
           <thead>
             <tr className="border-b">
               <th className="px-4 py-2"></th>
+              <th className="px-4 py-2">№</th>
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Height</th>
               <th className="px-4 py-2">Mass</th>
@@ -127,43 +139,51 @@ const PeopleTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {currentPeople.map((person, index) => (
-              <tr
-                key={index}
-                className="border-b"
-                onClick={() => {
-                  setCurrentPerson(person);
-                  setEditModalOpen(true);
-                }}
-              >
-                <td className="px-4 py-2">
-                  <input
-                    type="checkbox"
-                    checked={selectedRows.includes(index)}
-                    onChange={() => handleRowSelect(index)}
-                    onClick={(e) => e.stopPropagation()} // щоб не відкривав modal при кліку на чекбокс
-                  />
-                </td>
-                <td className="px-4 py-2">{person.name}</td>
-                <td className="px-4 py-2">{person.height}</td>
-                <td className="px-4 py-2">{person.mass}</td>
-                <td className="px-4 py-2">{person.hair_color}</td>
-                <td className="px-4 py-2">{person.skin_color}</td>
-                <td className="px-4 py-2">{person.eye_color}</td>
-                <td className="px-4 py-2">{person.birth_year}</td>
-                <td className="px-4 py-2">{person.gender}</td>
-                <td className="px-4 py-2">
-                  <img src="solar_pen-linear.svg" alt="edit" />
-                </td>
-              </tr>
-            ))}
+            {currentPeople.map((person, index) => {
+              const globalIndex = indexOfFirstPerson + index; // для глобальної нумерації
+              const isEvenRow = globalIndex % 2 === 0;
+
+              return (
+                <tr
+                  key={globalIndex}
+                  className={`border-b cursor-pointer ${
+                    isEvenRow ? '' : 'bg-gray-100'
+                  }`}
+                  onClick={() => {
+                    setCurrentPerson(person);
+                    setEditModalOpen(true);
+                  }}
+                >
+                  <td className="px-4 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedRows.includes(globalIndex)}
+                      onChange={() => handleRowSelect(globalIndex)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </td>
+                  <td className="px-4 py-2">{globalIndex + 1}</td>
+                  <td className="px-4 py-2">{person.name}</td>
+                  <td className="px-4 py-2">{person.height}</td>
+                  <td className="px-4 py-2">{person.mass}</td>
+                  <td className="px-4 py-2">{person.hair_color}</td>
+                  <td className="px-4 py-2">{person.skin_color}</td>
+                  <td className="px-4 py-2">{person.eye_color}</td>
+                  <td className="px-4 py-2">{person.birth_year}</td>
+                  <td className="px-4 py-2">{person.gender}</td>
+                  <td className="px-4 py-2">
+                    <img src="solar_pen-linear.svg" alt="edit" />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
       <Pagination
         currentPage={currentPage}
-        totalItems={people.length}
+        totalItems={visiblePeople.length}
         itemsPerPage={itemsPerPage}
         onPageChange={handlePageChange}
       />

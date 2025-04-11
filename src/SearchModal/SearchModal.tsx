@@ -21,17 +21,37 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, onSearch }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded w-96 space-y-4">
         <h2 className="text-lg font-semibold mb-2">Search Filter</h2>
-        {['name', 'gender', 'birth_year', 'eye_color'].map((field) => (
+        {[
+          'name',
+          'height',
+          'mass',
+          'hair_color',
+          'skin_color',
+          'eye_color',
+          'birth_year',
+          'gender',
+        ].map((field) => (
           <input
             key={field}
             name={field}
             value={filters[field] || ''}
             onChange={handleChange}
-            placeholder={field}
+            placeholder={field.replace('_', ' ')}
             className="w-full border p-2 rounded"
           />
         ))}
+
         <div className="flex justify-end gap-4">
+          <button
+            className="bg-yellow-400 text-white px-4 py-2 rounded"
+            onClick={() => {
+              setFilters({});
+              onSearch({});
+              // onClose();
+            }}
+          >
+            Clear
+          </button>
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
             Cancel
           </button>
