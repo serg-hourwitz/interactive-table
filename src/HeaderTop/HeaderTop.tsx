@@ -8,8 +8,8 @@ const HeaderTop = () => {
       <div className="flex flex-1 items-center justify-end gap-4">
         <img src="chat.svg" alt="chat" />
         <img src="notification.svg" alt="notification" />
-        <img src="public/partner.svg" alt="partner" />
-        <img src="public/setting.svg" alt="setting" />
+        <img src="partner.svg" alt="partner" />
+        <img src="setting.svg" alt="setting" />
         <div className="w-8 h-8 bg-gray-400 rounded-full"></div>
       </div>
     </div>
