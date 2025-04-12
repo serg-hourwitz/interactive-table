@@ -3,6 +3,7 @@ import axios from 'axios';
 import AddPersonModal from '../AddPersonModal/AddPersonModal';
 import EditPersonModal from '../EditPersonModal/EditPersonModal';
 import SearchModal from '../SearchModal/SearchModal';
+import ConfirmModalDelete from '../ConfirmModalDelete/ConfirmModalDelete';
 import Pagination from '../Pagination/Pagination';
 import OperationPanel from '../OperationPanel/OperationPanel';
 
@@ -14,6 +15,9 @@ const PeopleTable: React.FC = () => {
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [currentPerson, setCurrentPerson] = useState<any | null>(null);
   const [filteredPeople, setFilteredPeople] = useState<any[] | null>(null);
+  const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
+
+  
 
   // Пагінація
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,6 +66,20 @@ const PeopleTable: React.FC = () => {
   //   }
   // };
 
+  const handleDeleteSelected = () => {
+    setConfirmModalOpen(true);
+  };
+
+  const confirmDeletion = () => {
+    const updatedPeople = people.filter(
+      (_, index) => !selectedRows.includes(index)
+    );
+    setPeople(updatedPeople);
+    setSelectedRows([]);
+    setConfirmModalOpen(false);
+  };
+
+
   const handleSavePerson = (updatedPerson: any) => {
     const updatedPeople = people.map((p, i) =>
       p === currentPerson ? updatedPerson : p
@@ -81,15 +99,15 @@ const PeopleTable: React.FC = () => {
     setPeople([...people, person]);
   };
 
-  const handleDeleteSelected = () => {
-    if (window.confirm('Are you sure you want to delete selected items?')) {
-      const updatedPeople = people.filter(
-        (_, index) => !selectedRows.includes(index)
-      );
-      setPeople(updatedPeople);
-      setSelectedRows([]);
-    }
-  };
+  // const handleDeleteSelected = () => {
+  //   if (window.confirm('Are you sure you want to delete selected items?')) {
+  //     const updatedPeople = people.filter(
+  //       (_, index) => !selectedRows.includes(index)
+  //     );
+  //     setPeople(updatedPeople);
+  //     setSelectedRows([]);
+  //   }
+  // };
 
   const handleSearch = (filters: Record<string, string>) => {
     const filtered = people.filter((person) =>
@@ -122,20 +140,37 @@ const PeopleTable: React.FC = () => {
       />
 
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse">
+        <table className="min-w-full table-auto border-collapse mb-6 lg:mb-0">
           <thead>
-            <tr className="border-b">
-              <th className="px-4 py-2"></th>
-              <th className="px-4 py-2">№</th>
-              <th className="px-4 py-2">Name</th>
-              <th className="px-4 py-2">Height</th>
-              <th className="px-4 py-2">Mass</th>
-              <th className="px-4 py-2">Hair Color</th>
-              <th className="px-4 py-2">Skin Color</th>
-              <th className="px-4 py-2">Eye Color</th>
-              <th className="px-4 py-2">Birth Year</th>
-              <th className="px-4 py-2">Gender</th>
-              <th className="px-4 py-2"></th>
+            <tr className="border-b text-left text-base">
+              <th className="px-4 py-2">
+                <input
+                  type="checkbox"
+                  checked={
+                    selectedRows.length === people.length && people.length > 0
+                  }
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      const allIndices = people.map((_, index) => index);
+                      setSelectedRows(allIndices);
+                    } else {
+                      setSelectedRows([]);
+                    }
+                  }}
+                />
+              </th>
+              <th className="px-4 py-2">
+                <img src="public/number.svg" alt="number" />
+              </th>
+              <th className="px-4 py-2 font-medium">Name</th>
+              <th className="px-4 py-2 font-medium">Height</th>
+              <th className="px-4 py-2 font-medium">Mass</th>
+              <th className="px-4 py-2 font-medium">Hair Color</th>
+              <th className="px-4 py-2 font-medium">Skin Color</th>
+              <th className="px-4 py-2 font-medium">Eye Color</th>
+              <th className="px-4 py-2 font-medium">Birth Year</th>
+              <th className="px-4 py-2 font-medium">Gender</th>
+              <th className="px-4 py-2 font-medium"></th>
             </tr>
           </thead>
           <tbody>
@@ -147,7 +182,7 @@ const PeopleTable: React.FC = () => {
                 <tr
                   key={globalIndex}
                   className={`border-b cursor-pointer ${
-                    isEvenRow ? '' : 'bg-gray-100'
+                    isEvenRow ? '' : 'bg-gray-200'
                   }`}
                   onClick={() => {
                     setCurrentPerson(person);
@@ -162,16 +197,18 @@ const PeopleTable: React.FC = () => {
                       onClick={(e) => e.stopPropagation()}
                     />
                   </td>
-                  <td className="px-4 py-2">{globalIndex + 1}</td>
-                  <td className="px-4 py-2">{person.name}</td>
-                  <td className="px-4 py-2">{person.height}</td>
-                  <td className="px-4 py-2">{person.mass}</td>
-                  <td className="px-4 py-2">{person.hair_color}</td>
-                  <td className="px-4 py-2">{person.skin_color}</td>
-                  <td className="px-4 py-2">{person.eye_color}</td>
-                  <td className="px-4 py-2">{person.birth_year}</td>
-                  <td className="px-4 py-2">{person.gender}</td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 font-semibold text-xl font-secondary">
+                    {globalIndex + 1}.
+                  </td>
+                  <td className="px-4 py-2 text-xs">{person.name}</td>
+                  <td className="px-4 py-2 text-xs">{person.height}</td>
+                  <td className="px-4 py-2 text-xs">{person.mass}</td>
+                  <td className="px-4 py-2 text-xs">{person.hair_color}</td>
+                  <td className="px-4 py-2 text-xs">{person.skin_color}</td>
+                  <td className="px-4 py-2 text-xs">{person.eye_color}</td>
+                  <td className="px-4 py-2 text-xs">{person.birth_year}</td>
+                  <td className="px-4 py-2 text-xs">{person.gender}</td>
+                  <td className="px-4 py-2 text-xs">
                     <img src="solar_pen-linear.svg" alt="edit" />
                   </td>
                 </tr>
@@ -180,6 +217,13 @@ const PeopleTable: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      <ConfirmModalDelete
+        isOpen={isConfirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmDeletion}
+        message="Are you sure you want to delete the selected items?"
+      />
 
       <Pagination
         currentPage={currentPage}

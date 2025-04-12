@@ -32,8 +32,8 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 mx-1 border rounded-lg ${
-            currentPage === i ? 'bg-indigo-500 text-white' : 'bg-white'
+          className={`px-3 py-1 mx-1 text-black ${
+            currentPage === i ? 'text-xl font-semibold' : 'text-base'
           }`}
         >
           {i}
@@ -49,7 +49,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className={`px-3 py-1 mx-1 border rounded-lg ${
+          className={`px-3 py-1 mx-1 ${
             currentPage === totalPages ? 'bg-indigo-500 text-white' : 'bg-white'
           }`}
         >
@@ -62,13 +62,13 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex justify-center items-center mt-4">
+    <div className="flex justify-center items-center mt-4 mb-12">
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 border rounded-lg mr-2"
+        className="px-4 py-2 mr-2"
       >
-        Prev
+        <img src="public/arrow-prev.svg" alt="arrow" />
       </button>
 
       {renderPageButtons()}
@@ -76,9 +76,9 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 border rounded-lg ml-2"
+        className="px-4 py-2 ml-2"
       >
-        Next
+        <img src="public/arrow-next.svg" alt="arrow" />
       </button>
     </div>
   );

@@ -27,17 +27,20 @@ const AddPersonModal: React.FC<AddPersonModalProps> = ({ onClose, onSave }) => {
 
       if (!trimmed) {
         newErrors[key] = 'This field is required';
-      } else if (
-        (key === 'height' || key === 'mass') &&
-        !Number.isFinite(Number(trimmed))
-      ) {
-        newErrors[key] = 'Must be a valid number';
+      } else if (key === 'height' || key === 'mass' || key === 'birth_year') {
+        const numberValue = Number(trimmed);
+        if (!Number.isFinite(numberValue)) {
+          newErrors[key] = 'Must be a valid number';
+        } else if (numberValue < 0) {
+          newErrors[key] = 'Must be 0 or greater';
+        }
       }
     });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,7 +60,7 @@ const AddPersonModal: React.FC<AddPersonModalProps> = ({ onClose, onSave }) => {
         {Object.entries(formData).map(([key, value]) => (
           <div key={key}>
             <input
-              type={key === 'height' || key === 'mass' ? 'number' : 'text'}
+              type={key === 'height' || key === 'mass' || key === 'birth_year' ? 'number' : 'text'}
               name={key}
               value={value}
               onChange={handleChange}
@@ -67,16 +70,16 @@ const AddPersonModal: React.FC<AddPersonModalProps> = ({ onClose, onSave }) => {
               }`}
             />
             {errors[key] && (
-              <p className="text-red-500 text-sm mt-1">{errors[key]}</p>
+              <p className="text-red-500 text-xs mt-1">{errors[key]}</p>
             )}
           </div>
         ))}
         <div className="flex justify-end gap-4">
-          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
+          <button className="bg-gray-300 px-4 py-2 rounded-lg" onClick={onClose}>
             Cancel
           </button>
           <button
-            className={`px-4 py-2 rounded ${
+            className={`px-4 py-2 rounded-lg ${
               Object.keys(errors).length === 0
                 ? 'bg-indigo-600 text-white'
                 : 'bg-gray-400 text-white cursor-not-allowed'

@@ -76,20 +76,20 @@ const EditPersonModal: React.FC<EditPersonModalProps> = ({
               name={key}
               value={value}
               onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
+              className="w-full border px-3 py-2 rounded text-xs"
             />
           </div>
         ))}
 
         <div className="flex justify-end gap-3 mt-4">
           <button
-            className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+            className="bg-gray-300 px-4 py-2 rounded-lg transition-all duration-300 ease-in-out hover:bg-gray-400"
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-indigo-300 text-white px-4 py-2 rounded-lg transition-all duration-300 ease-in-out hover:bg-indigo-500"
             onClick={handleSubmit}
           >
             Save
