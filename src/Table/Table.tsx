@@ -72,7 +72,7 @@ const PeopleTable: React.FC = () => {
   };
 
   const handleSavePerson = (updatedPerson: any) => {
-    const updatedPeople = people.map((p, i) =>
+    const updatedPeople = people.map((p) =>
       p === currentPerson ? updatedPerson : p
     );
     setPeople(updatedPeople);
