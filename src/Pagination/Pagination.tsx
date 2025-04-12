@@ -33,7 +33,7 @@ const Pagination: React.FC<PaginationProps> = ({
           key={i}
           onClick={() => handlePageChange(i)}
           className={`px-3 py-1 mx-1 text-black ${
-            currentPage === i ? 'text-xl font-semibold' : 'text-base'
+            currentPage === i ? 'md:text-xl font-semibold' : 'md:text-base'
           }`}
         >
           {i}
@@ -62,7 +62,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex justify-center items-center mt-4 mb-12">
+    <div className="flex flex-wrap justify-center items-center mt-4 mb-12">
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}

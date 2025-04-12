@@ -1,5 +1,3 @@
-// import './App.css'
-
 import Header from './Header/Header';
 import PeopleTable from './Table/Table';
 

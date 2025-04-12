@@ -3,6 +3,7 @@ import axios from 'axios';
 import AddPersonModal from '../AddPersonModal/AddPersonModal';
 import EditPersonModal from '../EditPersonModal/EditPersonModal';
 import SearchModal from '../SearchModal/SearchModal';
+import SearchErrorModal from '../SearchErrorModal/SearchErrorModal';
 import ConfirmModalDelete from '../ConfirmModalDelete/ConfirmModalDelete';
 import Pagination from '../Pagination/Pagination';
 import OperationPanel from '../OperationPanel/OperationPanel';
@@ -13,11 +14,10 @@ const PeopleTable: React.FC = () => {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
+  const [isErrorModalOpen, setErrorModalOpen] = useState(false);
   const [currentPerson, setCurrentPerson] = useState<any | null>(null);
   const [filteredPeople, setFilteredPeople] = useState<any[] | null>(null);
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
-
-  
 
   // Пагінація
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,14 +58,6 @@ const PeopleTable: React.FC = () => {
     setItemsPerPage(Number(event.target.value));
   };
 
-  // const handleRowClick = (e: React.MouseEvent, person: any) => {
-  //   const target = e.target as HTMLElement;
-  //   if (target.tagName.toLowerCase() !== 'input') {
-  //     setCurrentPerson(person);
-  //     setEditModalOpen(true);
-  //   }
-  // };
-
   const handleDeleteSelected = () => {
     setConfirmModalOpen(true);
   };
@@ -78,7 +70,6 @@ const PeopleTable: React.FC = () => {
     setSelectedRows([]);
     setConfirmModalOpen(false);
   };
-
 
   const handleSavePerson = (updatedPerson: any) => {
     const updatedPeople = people.map((p, i) =>
@@ -99,24 +90,19 @@ const PeopleTable: React.FC = () => {
     setPeople([...people, person]);
   };
 
-  // const handleDeleteSelected = () => {
-  //   if (window.confirm('Are you sure you want to delete selected items?')) {
-  //     const updatedPeople = people.filter(
-  //       (_, index) => !selectedRows.includes(index)
-  //     );
-  //     setPeople(updatedPeople);
-  //     setSelectedRows([]);
-  //   }
-  // };
-
   const handleSearch = (filters: Record<string, string>) => {
     const filtered = people.filter((person) =>
       Object.entries(filters).every(([key, value]) =>
         person[key]?.toLowerCase().includes(value.toLowerCase())
       )
     );
-    setFilteredPeople(filtered);
-    setCurrentPage(1); // скинути на першу сторінку
+
+    if (filtered.length === 0) {
+      setErrorModalOpen(true);
+    } else {
+      setFilteredPeople(filtered);
+      setCurrentPage(1);
+    }
   };
 
   // Розрахунок індексів для пагінації
@@ -197,7 +183,7 @@ const PeopleTable: React.FC = () => {
                       onClick={(e) => e.stopPropagation()}
                     />
                   </td>
-                  <td className="px-4 py-2 font-semibold text-xl font-secondary">
+                  <td className="px-4 py-2 font-semibold text-sm md:text-xl font-secondary">
                     {globalIndex + 1}.
                   </td>
                   <td className="px-4 py-2 text-xs">{person.name}</td>
@@ -223,6 +209,18 @@ const PeopleTable: React.FC = () => {
         onClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmDeletion}
         message="Are you sure you want to delete the selected items?"
+      />
+
+      <SearchErrorModal
+        isOpen={isErrorModalOpen}
+        onRetry={() => {
+          setErrorModalOpen(false);
+          setSearchModalOpen(true);
+        }}
+        onCancel={() => {
+          setErrorModalOpen(false);
+          setSearchModalOpen(false);
+        }}
       />
 
       <Pagination

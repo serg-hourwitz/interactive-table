@@ -47,7 +47,6 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, onSearch }) => {
             onClick={() => {
               setFilters({});
               onSearch({});
-              // onClose();
             }}
           >
             Clear
