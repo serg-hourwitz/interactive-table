@@ -68,7 +68,7 @@ const Pagination: React.FC<PaginationProps> = ({
         disabled={currentPage === 1}
         className="px-4 py-2 mr-2"
       >
-        <img src="public/arrow-prev.svg" alt="arrow" />
+        <img src="arrow-prev.svg" alt="arrow" />
       </button>
 
       {renderPageButtons()}
@@ -78,7 +78,7 @@ const Pagination: React.FC<PaginationProps> = ({
         disabled={currentPage === totalPages}
         className="px-4 py-2 ml-2"
       >
-        <img src="public/arrow-next.svg" alt="arrow" />
+        <img src="arrow-next.svg" alt="arrow" />
       </button>
     </div>
   );

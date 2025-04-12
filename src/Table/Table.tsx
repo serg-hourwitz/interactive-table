@@ -146,7 +146,7 @@ const PeopleTable: React.FC = () => {
                 />
               </th>
               <th className="px-4 py-2">
-                <img src="public/number.svg" alt="number" />
+                <img src="number.svg" alt="number" />
               </th>
               <th className="px-4 py-2 font-medium">Name</th>
               <th className="px-4 py-2 font-medium">Height</th>
