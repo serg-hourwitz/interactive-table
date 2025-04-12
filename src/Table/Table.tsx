@@ -186,15 +186,15 @@ const PeopleTable: React.FC = () => {
                   <td className="px-4 py-2 font-semibold text-sm md:text-xl font-secondary">
                     {globalIndex + 1}.
                   </td>
-                  <td className="px-4 py-2 text-xs">{person.name}</td>
-                  <td className="px-4 py-2 text-xs">{person.height}</td>
-                  <td className="px-4 py-2 text-xs">{person.mass}</td>
-                  <td className="px-4 py-2 text-xs">{person.hair_color}</td>
-                  <td className="px-4 py-2 text-xs">{person.skin_color}</td>
-                  <td className="px-4 py-2 text-xs">{person.eye_color}</td>
-                  <td className="px-4 py-2 text-xs">{person.birth_year}</td>
-                  <td className="px-4 py-2 text-xs">{person.gender}</td>
-                  <td className="px-4 py-2 text-xs">
+                  <td className="px-4 py-2 text-sm">{person.name}</td>
+                  <td className="px-4 py-2 text-sm">{person.height}</td>
+                  <td className="px-4 py-2 text-sm">{person.mass}</td>
+                  <td className="px-4 py-2 text-sm">{person.hair_color}</td>
+                  <td className="px-4 py-2 text-sm">{person.skin_color}</td>
+                  <td className="px-4 py-2 text-sm">{person.eye_color}</td>
+                  <td className="px-4 py-2 text-sm">{person.birth_year}</td>
+                  <td className="px-4 py-2 text-sm">{person.gender}</td>
+                  <td className="px-4 py-2 text-sm">
                     <img src="solar_pen-linear.svg" alt="edit" />
                   </td>
                 </tr>
