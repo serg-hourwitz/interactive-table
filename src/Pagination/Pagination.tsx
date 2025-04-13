@@ -24,16 +24,48 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const renderPageButtons = () => {
     const pageButtons = [];
+    const half = Math.floor(maxVisiblePages / 2);
 
-    const visiblePages = Math.min(totalPages, maxVisiblePages);
+    let startPage = Math.max(currentPage - half, 1);
+    let endPage = startPage + maxVisiblePages - 1;
 
-    for (let i = 1; i <= visiblePages; i++) {
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+    }
+
+    // Якщо треба, додаємо кнопку на першу сторінку і "..."
+    if (startPage > 1) {
+      pageButtons.push(
+        <button
+          key={1}
+          onClick={() => handlePageChange(1)}
+          className={`px-3 py-1 mx-1 ${
+            currentPage === 1 ? 'md:text-xl font-semibold' : ''
+          }`}
+        >
+          1
+        </button>
+      );
+
+      if (startPage > 2) {
+        pageButtons.push(
+          <span key="start-dots" className="mx-2">
+            ...
+          </span>
+        );
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
       pageButtons.push(
         <button
           key={i}
           onClick={() => handlePageChange(i)}
           className={`px-3 py-1 mx-1 text-black ${
-            currentPage === i ? 'md:text-xl font-semibold' : 'md:text-base'
+            currentPage === i
+              ? 'md:text-xl font-semibold'
+              : 'md:text-base'
           }`}
         >
           {i}
@@ -41,16 +73,24 @@ const Pagination: React.FC<PaginationProps> = ({
       );
     }
 
-    if (totalPages > maxVisiblePages) {
+    // Якщо треба, додаємо "..." і останню сторінку
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageButtons.push(
+          <span key="end-dots" className="mx-2">
+            ...
+          </span>
+        );
+      }
+
       pageButtons.push(
-        <span key="dots" className="mx-2">
-          ...
-        </span>,
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
           className={`px-3 py-1 mx-1 ${
-            currentPage === totalPages ? 'bg-indigo-500 text-white' : 'bg-white'
+            currentPage === totalPages
+              ? 'md:text-xl font-semibold'
+              : 'md:text-base'
           }`}
         >
           {totalPages}
@@ -60,6 +100,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
     return pageButtons;
   };
+
 
   return (
     <div className="flex flex-wrap justify-center items-center mt-4 mb-12">
