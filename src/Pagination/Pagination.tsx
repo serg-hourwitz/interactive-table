@@ -40,7 +40,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={1}
           onClick={() => handlePageChange(1)}
-          className={`px-3 py-1 mx-1 ${
+          className={`px-3 py-1 mx-1 transition-all duration-300 ease-in-out ${
             currentPage === 1 ? 'md:text-xl font-semibold' : ''
           }`}
         >
@@ -62,10 +62,8 @@ const Pagination: React.FC<PaginationProps> = ({
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 mx-1 text-black ${
-            currentPage === i
-              ? 'md:text-xl font-semibold'
-              : 'md:text-base'
+          className={`px-3 py-1 mx-1 text-black transition-all duration-300 ease-in-out ${
+            currentPage === i ? 'md:text-xl font-semibold' : 'md:text-base'
           }`}
         >
           {i}
@@ -107,7 +105,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 mr-2"
+        className="px-4 py-2 mr-2  transition-all duration-300 ease-in-out"
       >
         <img src="arrow-prev.svg" alt="arrow" />
       </button>
@@ -117,7 +115,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 ml-2"
+        className="px-4 py-2 ml-2 transition-all duration-300 ease-in-out"
       >
         <img src="arrow-next.svg" alt="arrow" />
       </button>
