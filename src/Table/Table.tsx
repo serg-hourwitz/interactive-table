@@ -18,6 +18,7 @@ const PeopleTable: React.FC = () => {
   const [currentPerson, setCurrentPerson] = useState<any | null>(null);
   const [filteredPeople, setFilteredPeople] = useState<any[] | null>(null);
   const [isConfirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Пагінація
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,8 +40,10 @@ const PeopleTable: React.FC = () => {
   useEffect(() => {
     // Fetch data from API
     const loadPeople = async () => {
+      setIsLoading(true);
       const data = await fetchAllPeople();
       setPeople(data);
+      setIsLoading(false);
     };
 
     loadPeople();
@@ -124,7 +127,6 @@ const PeopleTable: React.FC = () => {
         onItemsPerPageChange={handleItemsPerPageChange}
         itemsPerPage={itemsPerPage}
       />
-
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border-collapse mb-6 lg:mb-0">
           <thead>
@@ -160,6 +162,21 @@ const PeopleTable: React.FC = () => {
             </tr>
           </thead>
           <tbody>
+            {isLoading ? (
+              <tr>
+                <td colSpan={11} className="text-center py-4">
+                  Loading...
+                </td>
+              </tr>
+            ) : (
+              currentPeople.length === 0 && (
+                <tr>
+                  <td colSpan={11} className="text-center py-4">
+                    No data found
+                  </td>
+                </tr>
+              )
+            )}
             {currentPeople.map((person, index) => {
               const globalIndex = indexOfFirstPerson + index; // для глобальної нумерації
               const isEvenRow = globalIndex % 2 === 0;
