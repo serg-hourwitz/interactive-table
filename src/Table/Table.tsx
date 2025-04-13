@@ -164,7 +164,7 @@ const PeopleTable: React.FC = () => {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan={11} className="text-center py-4">
+                <td colSpan={11} className="text-left md:text-center py-4">
                   Loading...
                 </td>
               </tr>
