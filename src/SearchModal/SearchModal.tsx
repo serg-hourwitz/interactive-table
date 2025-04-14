@@ -1,11 +1,16 @@
 import { useState } from 'react';
 
 interface SearchModalProps {
+  isOpen: boolean;
   onClose: () => void;
-  onSearch: (criteria: Record<string, string>) => void;
+  onSearch: (filters: Record<string, string>) => void;
 }
-
-const SearchModal: React.FC<SearchModalProps> = ({ onClose, onSearch }) => {
+const SearchModal: React.FC<SearchModalProps> = ({
+  isOpen,
+  onClose,
+  onSearch,
+}) => {
+  if (!isOpen) return null;
   const [filters, setFilters] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
